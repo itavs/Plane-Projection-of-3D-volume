@@ -219,3 +219,23 @@ Testing is complete when:
 
 Any change to expected behavior must be reflected consistently
 in the SRS, algorithm description, tests, and README.
+
+## 13. Execution Record
+
+### Initial NRRD Reader Checks — 2026-10-22
+
+Executed `NrrdReaderTest` using the IntelliJ JUnit runner.
+
+Dataset: `data/constant_100_10x10x10.nrrd`
+
+| Check | Result |
+| --- | --- |
+| Reads dimensions as 10 × 10 × 10 | PASS |
+| Reads all 1,000 voxel values as 100 | PASS |
+| Returns zero at six tested out-of-bounds positions | PASS |
+
+Total: 3 tests passed.
+
+This covers N01 and an initial check of integer-index boundary
+handling. Other planned tests have not yet been executed.
+Execution through Maven remains to be verified.
