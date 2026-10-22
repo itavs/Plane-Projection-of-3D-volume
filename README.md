@@ -83,6 +83,9 @@ Initial versions of the requirements specification and detailed
 algorithm description are available in [SRS](docs/SRS.md) and
 [Algorithm](docs/ALGORITHM.md).
 
-Remaining work includes dataset definition, a documented testing
-strategy and its execution, command-line argument handling, and
-a documented performance experiment.
+The selected datasets and their availability are documented
+in [Datasets](docs/DATASETS.md).
+
+Remaining work includes public access to the course-shared datasets,
+a documented testing strategy and its execution, command-line
+argument handling, and a documented performance experiment.
