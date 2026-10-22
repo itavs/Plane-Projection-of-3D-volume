@@ -74,8 +74,15 @@ public class NrrdReader {
                 byte[] values = new byte[(int) byteCount];
 
 
-                data.readFully(values);
-
+                try {
+                    data.readFully(values);
+                } catch (EOFException e) {
+                    throw new IOException(
+                            "Incomplete NRRD voxel data: expected "
+                                    + byteCount + " decoded bytes.",
+                            e
+                    );
+                }
                 return new Volume(
                         sizes[0], sizes[1], sizes[2],
                         type.bytes, type.signed,

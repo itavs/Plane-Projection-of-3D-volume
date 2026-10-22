@@ -239,3 +239,26 @@ Total: 3 tests passed.
 This covers N01 and an initial check of integer-index boundary
 handling. Other planned tests have not yet been executed.
 Execution through Maven remains to be verified.
+
+### Expanded NRRD Reader Checks — 2026-10-22
+
+Executed `NrrdReaderTest` using the IntelliJ JUnit runner.
+
+Coverage includes volume dimensions, axis ordering, signed and
+unsigned integer decoding, byte order, raw/gzip encoding,
+boundary access, and invalid input handling.
+
+Initial result: 16 passed, 1 failed.
+
+The incomplete-payload test revealed that the reader rejected
+missing data but returned an exception without a descriptive
+message.
+
+The reader now catches EOFException during payload reading and
+throws IOException with an explicit incomplete-data message,
+preserving the original cause.
+
+Result after the fix: 17 passed, 0 failed.
+
+Gzip trailer corruption and execution through Maven have not
+yet been verified.
