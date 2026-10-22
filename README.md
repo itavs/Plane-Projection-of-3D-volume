@@ -86,6 +86,9 @@ algorithm description are available in [SRS](docs/SRS.md) and
 The selected datasets and their availability are documented
 in [Datasets](docs/DATASETS.md).
 
+The planned checks are documented in
+[Testing Strategy](docs/TESTING.md).
+
 Remaining work includes public access to the course-shared datasets,
-a documented testing strategy and its execution, command-line
+implementation and execution of the planned tests, command-line
 argument handling, and a documented performance experiment.
