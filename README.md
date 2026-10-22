@@ -79,12 +79,10 @@ operation, input data, and execution environment.
 
 ## Project Status
 
-The initial processing pipeline is implemented, and preliminary
-runs have produced MP4 output.
+Initial versions of the requirements specification and detailed
+algorithm description are available in [SRS](docs/SRS.md) and
+[Algorithm](docs/ALGORITHM.md).
 
-Remaining work includes the requirements specification, detailed
-algorithm documentation, dataset definition, systematic testing,
-command-line argument handling, and a documented performance experiment.
-
-Reproducible execution instructions and demo results will be added
-as these steps are completed.
+Remaining work includes dataset definition, a documented testing
+strategy and its execution, command-line argument handling, and
+a documented performance experiment.
