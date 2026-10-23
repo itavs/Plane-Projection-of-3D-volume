@@ -331,3 +331,19 @@ volume and a temporary volume with M[x][y][z] = x + 10y + 100z.
 
 No production-code changes were required.
 Video conversion and encoding were not tested in this group.
+
+### VideoWriter — Test Results (2026-10-23)
+
+- Result: 13 tests passed.
+- Coverage includes input validation, file handling, frame counting,
+  frame order, grayscale mapping, image orientation, aspect ratio,
+  output dimensions, and playback rate.
+- Initial testing found grayscale differences after video encoding
+  and decoding: an expected value of 64 was decoded as 51.
+- A separate test confirmed that grayscale values were correct
+  before encoding.
+- Fixed the JCodec 0.2.5 conversion path by writing limited-range
+  grayscale luma directly, with neutral chroma.
+- All tests passed after the fix without increasing the permitted
+  color tolerance.
+- Tests were run through IntelliJ IDEA; Maven verification is pending.

@@ -1,9 +1,15 @@
 package Exercise1_OOP;
 
-import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.api.transcode.PixelStore.LoanerPicture;
+import org.jcodec.api.transcode.SinkImpl;
+import org.jcodec.api.transcode.VideoFrameWithPacket;
+import org.jcodec.common.Codec;
+import org.jcodec.common.Format;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
-import org.jcodec.common.model.Rational;
+import org.jcodec.common.model.ColorSpace;
+import org.jcodec.common.model.Packet;
+import org.jcodec.common.model.Picture;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,7 +24,7 @@ public class VideoWriter implements AutoCloseable {
     private final double whiteValue;
 
     private SeekableByteChannel channel;
-    private AWTSequenceEncoder encoder;
+    private SinkImpl encoder;
 
     private boolean closed;
     private int frameCount;
@@ -36,7 +42,6 @@ public class VideoWriter implements AutoCloseable {
 
         if (width <= 0 || height <= 0
                 || width % 2 != 0 || height % 2 != 0) {
-
             throw new IllegalArgumentException(
                     "Video width and height must be positive and even.");
         }
@@ -66,12 +71,24 @@ public class VideoWriter implements AutoCloseable {
         validateFrame(frame);
 
         BufferedImage image = createImage(frame);
+        Picture picture = toVideoPicture(image);
 
         if (encoder == null) {
             openEncoder();
         }
 
-        encoder.encodeImage(image);
+        Packet packet = Packet.createPacket(
+                null,
+                frameCount,
+                fps,
+                1,
+                frameCount,
+                Packet.FrameType.KEY,
+                null);
+
+        encoder.outputVideoFrame(new VideoFrameWithPacket(
+                packet, new LoanerPicture(picture, 0)));
+
         frameCount++;
     }
 
@@ -79,8 +96,10 @@ public class VideoWriter implements AutoCloseable {
         channel = NIOUtils.writableChannel(outputFile);
 
         try {
-            encoder = new AWTSequenceEncoder(
-                    channel, Rational.R(fps, 1));
+            encoder = SinkImpl.createWithStream(
+                    channel, Format.MOV, Codec.H264, null);
+
+            encoder.init();
         } catch (IOException | RuntimeException e) {
             try {
                 channel.close();
@@ -97,7 +116,6 @@ public class VideoWriter implements AutoCloseable {
     private void validateFrame(long[][] frame) {
         if (frame == null || frame.length == 0
                 || frame[0] == null || frame[0].length == 0) {
-
             throw new IllegalArgumentException(
                     "Frame must not be empty.");
         }
@@ -112,7 +130,8 @@ public class VideoWriter implements AutoCloseable {
         }
     }
 
-    private BufferedImage createImage(long[][] frame) {
+    // Package-private so tests can inspect the image before encoding.
+    BufferedImage createImage(long[][] frame) {
         int sourceHeight = frame.length;
         int sourceWidth = frame[0].length;
 
@@ -143,7 +162,6 @@ public class VideoWriter implements AutoCloseable {
                         (int) ((x + 0.5) * sourceWidth / targetWidth));
 
                 int gray = toGray(frame[sourceY][sourceX]);
-
                 int rgb = (gray << 16) | (gray << 8) | gray;
 
                 image.setRGB(offsetX + x, offsetY + y, rgb);
@@ -151,6 +169,40 @@ public class VideoWriter implements AutoCloseable {
         }
 
         return image;
+    }
+
+    private Picture toVideoPicture(BufferedImage image) {
+        /*
+         * JCodec 0.2.5 requires the YUV420J input tag, but its H.264
+         * encoder does not signal full-range video.
+         *
+         * For our grayscale images, write limited-range luma
+         * directly and bypass its RGB-to-YUV conversion.
+         */
+        Picture picture = Picture.create(
+                width, height, ColorSpace.YUV420J);
+
+        byte[] luma = picture.getPlaneData(0);
+        int index = 0;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int gray = image.getRGB(x, y) & 0xff;
+
+                // Map grayscale 0..255 to video luma 16..235.
+                int limitedY = 16 + (219 * gray + 127) / 255;
+
+                // JCodec stores channel values with a -128 offset.
+                luma[index++] = (byte) (limitedY - 128);
+            }
+        }
+
+        /*
+         * The chroma planes are initialized to zero.
+         * With JCodec's offset, zero represents neutral chroma,
+         * which is appropriate for grayscale.
+         */
+        return picture;
     }
 
     private int toGray(long value) {
