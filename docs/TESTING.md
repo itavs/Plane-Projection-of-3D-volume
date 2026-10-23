@@ -286,3 +286,24 @@ No production-code changes were required.
 
 Unreadable-file permissions and execution through Maven
 have not yet been verified.
+
+### Geometry Validator Checks — 2026-10-23
+
+Executed `GeometryValidatorTest` using the IntelliJ JUnit runner.
+
+Result: 18 passed, 0 failed.
+
+Verified:
+- Valid isosceles triangles and correct apex ordering.
+- Widening and narrowing isosceles trapezoids.
+- Rectangles as the accepted equal-base special case.
+- Translated and tilted shapes.
+- Rejection of unequal legs, nonparallel bases,
+  non-coplanar points, crossed legs, and zero-area shapes.
+- Rejection of repeated or overly close points,
+  missing rows, invalid point counts, and non-finite coordinates.
+- Triangle leg-length comparisons below and above tolerance.
+- Descriptive messages for the tested rejection cases.
+
+No production-code changes were required.
+These results cover the selected cases, not every possible geometry.
