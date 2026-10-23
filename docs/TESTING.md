@@ -347,3 +347,21 @@ Video conversion and encoding were not tested in this group.
 - All tests passed after the fix without increasing the permitted
   color tolerance.
 - Tests were run through IntelliJ IDEA; Maven verification is pending.
+
+### Application — Integration Test Results (2026-10-23)
+
+- Result: 11 tests passed through IntelliJ IDEA.
+- Verified frame order and use of the volume-wide maximum
+  for grayscale normalization.
+- Verified processing of both triangles and trapezoids.
+- Verified skipping malformed CSV rows, invalid geometry,
+  and oversized frames while continuing with valid rows.
+- Verified that empty or entirely invalid input does not
+  create a video or overwrite an existing output file.
+- Verified black output for volumes containing only
+  non-positive values.
+- Verified propagation of I/O errors for missing or malformed
+  input files and an unavailable output directory.
+- Tests create small temporary NRRD and CSV files.
+- No changes to Application.java were required.
+- Maven verification and large-dataset experiments are pending.
