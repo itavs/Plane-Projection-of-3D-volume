@@ -365,3 +365,11 @@ Video conversion and encoding were not tested in this group.
 - Tests create small temporary NRRD and CSV files.
 - No changes to Application.java were required.
 - Maven verification and large-dataset experiments are pending.
+
+### Full Maven Test Run (2026-10-23)
+
+- Executed the Maven test lifecycle through IntelliJ IDEA.
+- Results: 83 tests, 0 failures, 0 errors, 0 skipped.
+- Build result: BUILD SUCCESS.
+- This completes the Maven verification previously marked pending.
+- Large-dataset experiments and performance measurements remain pending.
