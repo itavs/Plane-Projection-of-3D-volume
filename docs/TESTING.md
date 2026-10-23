@@ -307,3 +307,27 @@ Verified:
 
 No production-code changes were required.
 These results cover the selected cases, not every possible geometry.
+
+### Frame Generator Checks — 2026-10-23
+
+Executed `FrameGeneratorTest` using the IntelliJ JUnit runner.
+
+Result: 12 passed, 0 failed.
+
+Verified:
+- Expected frame dimensions, pixel placement, and row order.
+- Triangle, rectangle, widening and narrowing trapezoid sampling.
+- Zero padding outside the sampled shape.
+- Volume boundaries along all three axes.
+- Negative fractional coordinates and floor-based voxel selection.
+- Fractional scan-line widths and final-step clamping.
+- Tilted slices sampling different Z layers.
+- Entirely out-of-volume slices.
+- Rejection of oversized frames, missing inputs,
+  and incorrect point counts.
+
+Expected raw matrices were specified explicitly using a constant
+volume and a temporary volume with M[x][y][z] = x + 10y + 100z.
+
+No production-code changes were required.
+Video conversion and encoding were not tested in this group.
