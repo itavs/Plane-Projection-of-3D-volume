@@ -373,3 +373,16 @@ Video conversion and encoding were not tested in this group.
 - Build result: BUILD SUCCESS.
 - This completes the Maven verification previously marked pending.
 - Large-dataset experiments and performance measurements remain pending.
+
+### Main — Manual Argument Checks (2026-10-23)
+
+Executed through IntelliJ IDEA using Program arguments:
+
+- Three valid paths: created an MP4 containing 3 frames;
+  process exited with code 0.
+- No arguments: printed the expected-arguments message;
+  process exited with code 2.
+- Missing NRRD file: printed an error;
+  process exited with code 1.
+
+Standalone command-line execution remains to be verified.
