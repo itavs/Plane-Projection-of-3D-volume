@@ -92,3 +92,38 @@ The planned checks are documented in
 Remaining work includes public access to the course-shared datasets,
 implementation and execution of the planned tests, command-line
 argument handling, and a documented performance experiment.
+
+## Build and Run (Windows CMD)
+
+Requirements:
+- JDK 26 and Maven available in the terminal.
+- An NRRD input file and a CSV file containing plane coordinates.
+- An existing output directory.
+
+Run the following commands from the project root
+(the directory containing pom.xml).
+
+### Build and prepare runtime dependencies
+
+```bat
+mvn compile dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=target/dependency
+```
+
+### Run
+
+```bat
+java -cp "target/classes;target/dependency/*" Exercise1_OOP.Main "path/to/input.nrrd" "path/to/planes.csv" "path/to/output.mp4"
+```
+
+Replace the three paths with your actual file paths.
+Argument order: NRRD input, CSV input, MP4 output.
+
+The output video uses 30 FPS. The reported frame generation
+rate measures projection computation only, not total runtime
+or video playback speed.
+
+### Run tests
+
+```bat
+mvn test
+```

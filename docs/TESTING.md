@@ -386,3 +386,14 @@ Executed through IntelliJ IDEA using Program arguments:
   process exited with code 1.
 
 Standalone command-line execution remains to be verified.
+
+### Standalone CMD Execution (2026-10-23)
+
+- Environment: Windows, Java 26.0.1, Maven 3.9.11.
+- Compilation and runtime dependency preparation: BUILD SUCCESS.
+- Executed Exercise1_OOP.Main directly through Java from CMD.
+- Inputs: test_volume_500.nrrd and a CSV containing three trapezoids.
+- Output: cmd_result.mp4, with 3 frames and no skipped rows.
+- The output was visually consistent with the IntelliJ run.
+- This verifies the standalone execution previously marked pending.
+- This short run is a functional check, not a formal benchmark.
