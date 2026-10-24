@@ -30,6 +30,19 @@ it does not accumulate values along viewing rays.
 
 Each point consists of three numeric coordinates: `x`, `y`, and `z`.
 CSV rows contain 9 or 12 comma-separated values, without a header.
+Point order is significant:
+
+- Triangle: a, b, c, where a is the apex and
+  distance(a, b) equals distance(a, c).
+- Trapezoid: a1, a2, b, c, where a1–a2 and b–c are
+  the parallel bases, and a1–b and a2–c are the equal legs.
+
+Examples:
+
+```csv
+5,1,0,2,5,0,8,5,0
+4,1,0,6,1,0,1,5,0,9,5,0
+```
 
 ## Scope and Behavior
 
@@ -67,31 +80,55 @@ Responsibilities are separated into dedicated classes:
 - **Maven** — build configuration and dependency management.
 - **JCodec** — MP4 video encoding.
 
-## Performance Goal
+## Performance
 
-The assignment requires a frame-generation rate of at least
-30 FPS for a 500 × 500 × 500 byte volume, with 100 FPS or more
-as the expected target.
+The assignment requires at least 30 FPS for a
+500 × 500 × 500 byte volume, with 100 FPS or more as the target.
 
-Frame-generation throughput and video playback FPS are separate
-measurements. Formal experiments will document the measured
-operation, input data, and execution environment.
+For the tested croissant volume and sequence of 300 parallel
+trapezoidal slices, three repeated runs reported projection rates
+of 1146.62, 1202.26, and 1180.64 FPS.
+Their arithmetic mean was 1176.51 FPS.
+
+These measurements cover FrameGenerator.generate only.
+They exclude input loading, geometry validation, volume-wide
+maximum calculation, image resizing, and video encoding.
+
+The output video plays at 30 FPS. Projection throughput does
+not represent end-to-end video production speed, and the measured
+results apply to the documented workload and machine.
+
+See [experiment details and limitations](docs/EXPERIMENTS.md).
 
 ## Project Status
 
-Initial versions of the requirements specification and detailed
-algorithm description are available in [SRS](docs/SRS.md) and
-[Algorithm](docs/ALGORITHM.md).
+Implemented and verified:
 
-The selected datasets and their availability are documented
-in [Datasets](docs/DATASETS.md).
+- NRRD loading, CSV parsing, geometry validation, frame generation,
+  and MP4 video output.
+- Command-line arguments for input and output paths.
+- Successful execution from Windows CMD.
+- 85 automated tests passed through Maven with no failures,
+  errors, or skipped tests.
+- A documented experiment on a 500 × 500 × 500 volume,
+  including repeated measurements and a 10-second demo video.
 
-The planned checks are documented in
-[Testing Strategy](docs/TESTING.md).
+Project documentation:
 
-Remaining work includes public access to the course-shared datasets,
-implementation and execution of the planned tests, command-line
-argument handling, and a documented performance experiment.
+- [Software Requirements Specification](docs/SRS.md)
+- [Detailed Algorithm](docs/ALGORITHM.md)
+- [Datasets and Availability](docs/DATASETS.md)
+- [Testing Strategy and Results](docs/TESTING.md)
+- [Experiment and Results](docs/EXPERIMENTS.md)
+
+Remaining verification includes reviewing consistency between
+the requirements, implementation, and test coverage, and completing
+any outstanding dataset checks.
+
+The course-shared NRRD files are not included in the repository.
+Reproducing the croissant experiment requires obtaining the same
+input volume; its original provenance and public distribution
+source remain unverified.
 
 ## Build and Run (Windows CMD)
 
@@ -134,3 +171,9 @@ See [experiment details and results](docs/EXPERIMENTS.md).
 
 - [Slice coordinates](demo/croissant_planes.csv)
 - [Download the demo video](demo/croissant_demo.mp4)
+
+A reproducible synthetic experiment is available using the
+included volume generator and slice sequence.
+See [generation and execution instructions](docs/EXPERIMENTS.md#experiment-3--reproducible-synthetic-volume).
+
+- [Synthetic demo video](demo/synthetic_demo.mp4)

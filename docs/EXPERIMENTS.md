@@ -332,3 +332,33 @@ The commands provide the equivalent command-line workflow.
 - [Generator source](../src/main/java/Exercise1_OOP/SyntheticVolumeGenerator.java)
 - [Slice sequence](../demo/croissant_planes.csv)
 - [Demo video](../demo/synthetic_demo.mp4)
+
+### Windows CMD Reproduction Check
+
+The synthetic workflow was also executed from Windows CMD
+using the generated volume and the repository's CSV sequence.
+
+Video generation:
+- Output: synthetic_cmd_check.mp4.
+- Frames written: 300.
+- Skipped rows: 0.
+- Reported generation rate: 1188.68 FPS.
+
+Benchmark:
+- 3 warm-up rounds, excluded from measurements.
+- 5 measured rounds, totaling 1,500 frames.
+
+| Round | Generation time (ms) | FPS |
+|---|---:|---:|
+| 1 | 246.889 | 1215.12 |
+| 2 | 238.104 | 1259.95 |
+| 3 | 250.730 | 1196.51 |
+| 4 | 243.491 | 1232.08 |
+| 5 | 246.265 | 1218.20 |
+
+Mean of round rates: 1224.37 FPS.
+Combined throughput: 1224.01 FPS.
+Range: 1196.51–1259.95 FPS.
+
+This verifies command-line execution on the development machine.
+It is not a clean-machine installation test.
