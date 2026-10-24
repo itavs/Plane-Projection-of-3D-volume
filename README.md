@@ -127,3 +127,10 @@ or video playback speed.
 ```bat
 mvn test
 ```
+
+## Experiment and Demo
+
+See [experiment details and results](docs/EXPERIMENTS.md).
+
+- [Slice coordinates](demo/croissant_planes.csv)
+- [Download the demo video](demo/croissant_demo.mp4)
