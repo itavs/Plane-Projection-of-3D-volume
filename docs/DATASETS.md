@@ -66,9 +66,14 @@ An independent inspection of the supplied files confirmed:
 - Payload lengths matching the declared dimensions and types.
 - Exactly 1,000 values equal to 100 in the known-value dataset.
 
-This inspection does not establish that the Java application
-processes every file correctly. Application-level checks and
-their results will be documented separately.
+File inspection alone does not establish correct application behavior.
+
+The Java application has since processed croissant.nrrd to
+produce a 300-frame video. Repeated measurements and a benchmark
+with warm-up are documented in [Experiments](EXPERIMENTS.md).
+
+Full application runs on onion.nrrd, biscuit_cake.nrrd, and
+swiss_roll.nrrd have not yet been documented.
 
 ## Coverage and Limitations
 
@@ -78,7 +83,26 @@ raw and gzip encodings, and the required 500³ byte-volume size.
 The constant dataset provides a simple numerical reference,
 but cannot by itself detect swapped axes or incorrect indexing
 within the volume.
+Automated tests use additional small fixtures for axis ordering,
+integer boundary values, big-endian decoding, and malformed input.
+Many fixtures are generated in temporary directories during tests.
 
-Additional small fixtures may be introduced for axis ordering,
-integer boundary values, big-endian decoding, and malformed input
-when the testing strategy is defined.
+See [Testing Strategy and Results](TESTING.md) for the tested
+cases and recorded outcomes.
+
+## Reproducible Synthetic Dataset
+
+synthetic_500_v1.nrrd is an additional project-generated dataset:
+500 × 500 × 500 unsigned 8-bit voxels with raw encoding.
+
+SyntheticVolumeGenerator creates it deterministically using
+a gradient background and two concentric spheres.
+The generation rule and execution commands are documented
+in [Experiment 3](EXPERIMENTS.md#experiment-3--reproducible-synthetic-volume).
+
+The generator source is included in the repository.
+The generated NRRD file is not committed because it can be
+recreated locally.
+
+This provides a reproducible alternative experiment.
+It does not recreate or replace the course-shared datasets.
