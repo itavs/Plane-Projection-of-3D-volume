@@ -50,48 +50,48 @@ with the corresponding tests.
 
 ## 4. NRRD Reader Tests
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| N01 | Read the constant volume | Dimensions are 10 × 10 × 10; every voxel equals 100 |
-| N02 | Read a 3 × 4 × 5 volume with M[x][y][z] = x + 10y + 100z | Every value matches its coordinates; axes are not swapped |
-| N03 | Read unsigned boundary values | Values are preserved, including 255, 65535, and 4294967295 |
-| N04 | Read equivalent little-endian and big-endian files | Both produce identical voxel values |
-| N05 | Read equivalent raw and gzip files | Both produce identical voxel values |
-| N06 | Read signed integer fixtures | Negative and positive values are decoded correctly |
-| N07 | Invalid dimensions, missing required fields, or unsupported format | A descriptive error stops processing |
-| N08 | Truncated payload or damaged gzip data | The read fails; incomplete data is not accepted as a valid volume |
+| ID  | Case                                                               | Expected result                                                   |
+|-----|--------------------------------------------------------------------|-------------------------------------------------------------------|
+| N01 | Read the constant volume                                           | Dimensions are 10 × 10 × 10; every voxel equals 100               |
+| N02 | Read a 3 × 4 × 5 volume with M[x][y][z] = x + 10y + 100z           | Every value matches its coordinates; axes are not swapped         |
+| N03 | Read unsigned boundary values                                      | Values are preserved, including 255, 65535, and 4294967295        |
+| N04 | Read equivalent little-endian and big-endian files                 | Both produce identical voxel values                               |
+| N05 | Read equivalent raw and gzip files                                 | Both produce identical voxel values                               |
+| N06 | Read signed integer fixtures                                       | Negative and positive values are decoded correctly                |
+| N07 | Invalid dimensions, missing required fields, or unsupported format | A descriptive error stops processing                              |
+| N08 | Truncated payload or damaged gzip data                             | The read fails; incomplete data is not accepted as a valid volume |
 
 Boundary fixtures will include values around the signed/unsigned
 transition, such as 127/128 and 32767/32768.
 
 ## 5. CSV Reader Tests
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| C01 | Valid rows containing 9 and 12 values | Rows become arrays of three and four points |
-| C02 | Multiple valid rows | Point order and row order are preserved |
-| C03 | Surrounding whitespace and a UTF-8 BOM at the beginning | Valid numeric fields are parsed successfully |
-| C04 | Wrong field count, empty fields, or nonnumeric text | The row is reported and skipped |
-| C05 | NaN or infinite coordinates | The row is reported and skipped |
-| C06 | Valid and invalid rows mixed together | Valid rows remain in order and retain original line numbers |
-| C07 | Empty file or no valid rows | No valid slice definitions are returned |
-| C08 | Missing or unreadable input file | Processing stops with an error |
+| ID  | Case                                                    | Expected result                                             |
+|-----|---------------------------------------------------------|-------------------------------------------------------------|
+| C01 | Valid rows containing 9 and 12 values                   | Rows become arrays of three and four points                 |
+| C02 | Multiple valid rows                                     | Point order and row order are preserved                     |
+| C03 | Surrounding whitespace and a UTF-8 BOM at the beginning | Valid numeric fields are parsed successfully                |
+| C04 | Wrong field count, empty fields, or nonnumeric text     | The row is reported and skipped                             |
+| C05 | NaN or infinite coordinates                             | The row is reported and skipped                             |
+| C06 | Valid and invalid rows mixed together                   | Valid rows remain in order and retain original line numbers |
+| C07 | Empty file or no valid rows                             | No valid slice definitions are returned                     |
+| C08 | Missing or unreadable input file                        | Processing stops with an error                              |
 
 Numeric negative coordinates are valid CSV input. Whether a
 sample lies outside the volume is handled during sampling.
 
 ## 6. Geometry Tests
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| G01 | Valid isosceles triangle with the first point as apex | Accepted |
-| G02 | Triangle with unequal legs | Rejected |
-| G03 | Repeated points or collinear triangle points | Rejected |
-| G04 | Valid widening or narrowing isosceles trapezoid | Accepted |
-| G05 | Rectangle in the documented point order | Accepted |
-| G06 | Non-coplanar points, nonparallel bases, or unequal legs | Rejected |
-| G07 | Crossing edges or invalid point correspondence | Rejected |
-| G08 | Valid shapes translated or rotated in 3D | Accepted |
+| ID  | Case                                                           | Expected result                                       |
+|-----|----------------------------------------------------------------|-------------------------------------------------------|
+| G01 | Valid isosceles triangle with the first point as apex          | Accepted                                              |
+| G02 | Triangle with unequal legs                                     | Rejected                                              |
+| G03 | Repeated points or collinear triangle points                   | Rejected                                              |
+| G04 | Valid widening or narrowing isosceles trapezoid                | Accepted                                              |
+| G05 | Rectangle in the documented point order                        | Accepted                                              |
+| G06 | Non-coplanar points, nonparallel bases, or unequal legs        | Rejected                                              |
+| G07 | Crossing edges or invalid point correspondence                 | Rejected                                              |
+| G08 | Valid shapes translated or rotated in 3D                       | Accepted                                              |
 | G09 | Perturbations clearly below and above the documented tolerance | Accepted or rejected according to the tolerance rules |
 
 Tests near the tolerance boundary will use independently
@@ -102,18 +102,18 @@ calculated distances and directions.
 Raw matrices will be checked before grayscale conversion,
 resizing, and video encoding.
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| F01 | Valid shape entirely inside the constant volume | Every sampled pixel equals 100; unused pixels remain 0 |
-| F02 | Shape crossing a volume boundary | Interior samples equal 100 and exterior samples equal 0 |
-| F03 | Shape entirely outside the volume | Every output value is 0 |
-| F04 | Negative fractional coordinates | Samples outside the volume return 0 |
-| F05 | Coordinates at zero, just below an upper bound, and exactly at the upper bound | Bounds follow the documented half-open intervals |
-| F06 | Fractional coordinates in a varying-value volume | Values match floor-based voxel selection |
-| F07 | Small triangle and trapezoid with manually calculated output | Matrix dimensions and all pixel values match expectations |
-| F08 | Fractional leg lengths and scan-line widths | First/last rows, endpoint handling, and placement follow ALGORITHM.md |
-| F09 | Oblique slices through a varying-value volume | Samples match independently calculated 3D positions |
-| F10 | Requested frame exceeding the allocation limit | Rejected before the frame buffer is allocated |
+| ID  | Case                                                                           | Expected result                                                       |
+|-----|--------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| F01 | Valid shape entirely inside the constant volume                                | Every sampled pixel equals 100; unused pixels remain 0                |
+| F02 | Shape crossing a volume boundary                                               | Interior samples equal 100 and exterior samples equal 0               |
+| F03 | Shape entirely outside the volume                                              | Every output value is 0                                               |
+| F04 | Negative fractional coordinates                                                | Samples outside the volume return 0                                   |
+| F05 | Coordinates at zero, just below an upper bound, and exactly at the upper bound | Bounds follow the documented half-open intervals                      |
+| F06 | Fractional coordinates in a varying-value volume                               | Values match floor-based voxel selection                              |
+| F07 | Small triangle and trapezoid with manually calculated output                   | Matrix dimensions and all pixel values match expectations             |
+| F08 | Fractional leg lengths and scan-line widths                                    | First/last rows, endpoint handling, and placement follow ALGORITHM.md |
+| F09 | Oblique slices through a varying-value volume                                  | Samples match independently calculated 3D positions                   |
+| F10 | Requested frame exceeding the allocation limit                                 | Rejected before the frame buffer is allocated                         |
 
 The constant-volume tests alone cannot verify axis order or
 correct voxel selection. Varying-value fixtures are required
@@ -121,14 +121,14 @@ for those properties.
 
 ## 8. Image and Video Tests
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| V01 | Known raw intensities | Grayscale mapping follows the documented global white level |
-| V02 | Frames with different local maxima | The same global intensity mapping is used throughout |
-| V03 | Volume with no positive values | Output images are black |
-| V04 | Slices with different aspect ratios | Images fit within 640 × 480, preserving aspect ratio and using black margins |
-| V05 | A sequence of visually distinguishable slices | Decoded frame count and order match the valid input rows |
-| V06 | Completed MP4 | Video is readable, has 640 × 480 frames, and uses 30 playback FPS |
+| ID  | Case                                          | Expected result                                                              |
+|-----|-----------------------------------------------|------------------------------------------------------------------------------|
+| V01 | Known raw intensities                         | Grayscale mapping follows the documented global white level                  |
+| V02 | Frames with different local maxima            | The same global intensity mapping is used throughout                         |
+| V03 | Volume with no positive values                | Output images are black                                                      |
+| V04 | Slices with different aspect ratios           | Images fit within 640 × 480, preserving aspect ratio and using black margins |
+| V05 | A sequence of visually distinguishable slices | Decoded frame count and order match the valid input rows                     |
+| V06 | Completed MP4                                 | Video is readable, has 640 × 480 frames, and uses 30 playback FPS            |
 
 Exact voxel values will be checked in raw matrices.
 MP4 encoding may alter pixel values, so decoded video checks
@@ -139,16 +139,16 @@ agreement rather than exact pixel equality.
 
 These tests address the complete demo required by the assignment.
 
-| ID | Case | Expected result |
-| --- | --- | --- |
-| D01 | Three valid paths: NRRD, CSV, MP4 | A readable MP4 is generated |
-| D02 | Incorrect argument count | A usage message appears and processing does not start |
-| D03 | Input and output paths containing spaces | Paths are handled correctly when quoted |
-| D04 | Mixed valid, malformed, and geometrically invalid rows | Invalid rows are reported; valid frames appear in order |
-| D05 | No valid slices and no existing output | No output video is created |
-| D06 | No valid slices and an existing output file | The existing file remains unchanged |
-| D07 | Input read failure or output write failure | Processing reports failure and does not claim success |
-| D08 | Run using each available main dataset | Loading and video generation complete without unexpected errors |
+| ID  | Case                                                   | Expected result                                                 |
+|-----|--------------------------------------------------------|-----------------------------------------------------------------|
+| D01 | Three valid paths: NRRD, CSV, MP4                      | A readable MP4 is generated                                     |
+| D02 | Incorrect argument count                               | A usage message appears and processing does not start           |
+| D03 | Input and output paths containing spaces               | Paths are handled correctly when quoted                         |
+| D04 | Mixed valid, malformed, and geometrically invalid rows | Invalid rows are reported; valid frames appear in order         |
+| D05 | No valid slices and no existing output                 | No output video is created                                      |
+| D06 | No valid slices and an existing output file            | The existing file remains unchanged                             |
+| D07 | Input read failure or output write failure             | Processing reports failure and does not claim success           |
+| D08 | Run using each available main dataset                  | Loading and video generation complete without unexpected errors |
 
 Input files will be checked for unintended modification.
 
@@ -228,11 +228,11 @@ Executed `NrrdReaderTest` using the IntelliJ JUnit runner.
 
 Dataset: `data/constant_100_10x10x10.nrrd`
 
-| Check | Result |
-| --- | --- |
-| Reads dimensions as 10 × 10 × 10 | PASS |
-| Reads all 1,000 voxel values as 100 | PASS |
-| Returns zero at six tested out-of-bounds positions | PASS |
+| Check                                              | Result |
+|----------------------------------------------------|--------|
+| Reads dimensions as 10 × 10 × 10                   | PASS   |
+| Reads all 1,000 voxel values as 100                | PASS   |
+| Returns zero at six tested out-of-bounds positions | PASS   |
 
 Total: 3 tests passed.
 
@@ -271,6 +271,7 @@ with OpenJDK 26.0.1.
 Result: 12 passed, 0 failed.
 
 Verified:
+
 - Parsing three-point and four-point rows.
 - Coordinate values, row order, and original line numbers.
 - Whitespace, negative and fractional values, UTF-8 BOM,
@@ -294,6 +295,7 @@ Executed `GeometryValidatorTest` using the IntelliJ JUnit runner.
 Result: 18 passed, 0 failed.
 
 Verified:
+
 - Valid isosceles triangles and correct apex ordering.
 - Widening and narrowing isosceles trapezoids.
 - Rectangles as the accepted equal-base special case.
@@ -315,6 +317,7 @@ Executed `FrameGeneratorTest` using the IntelliJ JUnit runner.
 Result: 12 passed, 0 failed.
 
 Verified:
+
 - Expected frame dimensions, pixel placement, and row order.
 - Triangle, rectangle, widening and narrowing trapezoid sampling.
 - Zero padding outside the sampled shape.
@@ -397,3 +400,16 @@ Standalone command-line execution remains to be verified.
 - The output was visually consistent with the IntelliJ run.
 - This verifies the standalone execution previously marked pending.
 - This short run is a functional check, not a formal benchmark.
+
+### Input File Protection (2026-10-24)
+
+- Added output-path validation before input loading.
+- Output paths referring to either input file are rejected.
+- Added two regression tests covering:
+    - Output identical to the NRRD input path.
+    - An equivalent path referring to the CSV input.
+- Both tests verify that the contents of both input files
+  remain unchanged.
+- ApplicationTest: 13 tests passed.
+- Full Maven run: 85 tests, 0 failures, 0 errors, 0 skipped.
+- Build result: BUILD SUCCESS.

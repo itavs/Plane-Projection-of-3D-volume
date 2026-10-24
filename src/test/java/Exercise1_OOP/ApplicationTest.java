@@ -389,4 +389,51 @@ class ApplicationTest {
                             + ", but received " + actual);
         }
     }
+
+    @Test
+    void rejectsOutputThatMatchesNrrdAndPreservesInputs()
+            throws Exception {
+
+        Path volume = writeVolume(100);
+        Path csv = writeCsv(rectangle(0));
+
+        byte[] originalVolume = Files.readAllBytes(volume);
+        byte[] originalCsv = Files.readAllBytes(csv);
+
+        IllegalArgumentException error = assertThrows(
+                IllegalArgumentException.class,
+                () -> run(volume, csv, volume));
+
+        assertTrue(error.getMessage().contains(
+                "Output file must be different"));
+
+        assertArrayEquals(originalVolume, Files.readAllBytes(volume));
+        assertArrayEquals(originalCsv, Files.readAllBytes(csv));
+    }
+
+    @Test
+    void rejectsEquivalentCsvOutputPathAndPreservesInputs()
+            throws Exception {
+
+        Path volume = writeVolume(100);
+        Path csv = writeCsv(rectangle(0));
+
+        // A differently written path pointing to the same CSV.
+        Path output = csv.getParent()
+                .resolve(".")
+                .resolve(csv.getFileName());
+
+        byte[] originalVolume = Files.readAllBytes(volume);
+        byte[] originalCsv = Files.readAllBytes(csv);
+
+        IllegalArgumentException error = assertThrows(
+                IllegalArgumentException.class,
+                () -> run(volume, csv, output));
+
+        assertTrue(error.getMessage().contains(
+                "Output file must be different"));
+
+        assertArrayEquals(originalVolume, Files.readAllBytes(volume));
+        assertArrayEquals(originalCsv, Files.readAllBytes(csv));
+    }
 }

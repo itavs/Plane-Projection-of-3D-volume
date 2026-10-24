@@ -2,6 +2,8 @@ package Exercise1_OOP;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Application {
 
@@ -26,6 +28,8 @@ public class Application {
             String csvPath,
             String outputPath) throws IOException {
 
+        validateOutputPath(nrrdPath, csvPath, outputPath);
+
         System.out.println("Loading NRRD...");
         NrrdReader.Volume volume = nrrdReader.read(nrrdPath);
 
@@ -38,7 +42,6 @@ public class Application {
             return;
         }
 
-        // Use one grayscale mapping for the entire video.
         double whiteValue = findWhiteValue(volume);
 
         int writtenFrames = 0;
@@ -73,15 +76,14 @@ public class Application {
                     continue;
                 }
 
-                // Video writing errors stop the run;
-                // they are not treated as invalid CSV rows.
+
                 writer.writeFrame(frame);
 
                 generationNanos += elapsed;
                 writtenFrames++;
             }
 
-        } // VideoWriter.close() finishes the video here.
+        }
 
         if (writtenFrames == 0) {
             System.err.println(
@@ -105,6 +107,34 @@ public class Application {
         }
     }
 
+    private void validateOutputPath(
+            String nrrdPath,
+            String csvPath,
+            String outputPath) throws IOException {
+
+        Path output = Path.of(outputPath).toAbsolutePath().normalize();
+        Path nrrd = Path.of(nrrdPath).toAbsolutePath().normalize();
+        Path csv = Path.of(csvPath).toAbsolutePath().normalize();
+
+        if (refersToSameFile(output, nrrd)
+                || refersToSameFile(output, csv)) {
+            throw new IllegalArgumentException(
+                    "Output file must be different from both input files.");
+        }
+    }
+
+    private boolean refersToSameFile(Path first, Path second)
+            throws IOException {
+
+        if (first.equals(second)) {
+            return true;
+        }
+
+        return Files.exists(first)
+                && Files.exists(second)
+                && Files.isSameFile(first, second);
+    }
+
     private double findWhiteValue(NrrdReader.Volume volume) {
         long maximum = 0;
 
@@ -117,7 +147,6 @@ public class Application {
             }
         }
 
-        // VideoWriter requires a positive white value.
         return maximum > 0 ? (double) maximum : 1.0;
     }
 }
