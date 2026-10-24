@@ -131,9 +131,76 @@ axis-aligned trapezoidal slices. It does not measure arbitrary
 plane orientations, peak memory usage, or total execution time.
 
 The three repeated runs provide a small observational sample;
-they are not a controlled microbenchmark.
+they are not a controlled microbenchmark. Experiment 2 adds
+a fixed warm-up procedure within a single Java process.
 
 ### Experiment Files
 
 - [Slice coordinates (CSV)](../demo/croissant_planes.csv)
 - [Demo video (MP4)](../demo/croissant_demo.mp4)
+
+## Experiment 2 — Projection Benchmark with Warm-Up
+
+Date: 2026-10-24
+
+### Setup and Method
+
+This benchmark uses the same machine, croissant volume,
+and 300-slice CSV sequence described in Experiment 1.
+
+ProjectionBenchmark loads the volume and parses and validates
+the slices once. It then executes, within one Java process:
+
+- 3 warm-up rounds: 900 frames, excluded from measurements.
+- 5 measured rounds: 1,500 frames in total.
+
+Each call to FrameGenerator.generate is timed using
+System.nanoTime. Timed durations include frame allocation
+and volume sampling. Input loading, geometry validation,
+console output, and video encoding are excluded.
+
+The latest generated frame is retained through a volatile
+reference outside the timed region. Complete frame sequences
+are not retained in memory.
+
+### Results
+
+| Round | Frames | Generation time (ms) | FPS |
+|---|---:|---:|---:|
+| 1 | 300 | 243.362 | 1232.73 |
+| 2 | 300 | 240.944 | 1245.10 |
+| 3 | 300 | 239.215 | 1254.10 |
+| 4 | 300 | 243.564 | 1231.71 |
+| 5 | 300 | 239.514 | 1252.54 |
+
+- Arithmetic mean of round rates: **1243.24 FPS**.
+- Combined throughput: **1243.16 FPS**.
+- Range: **1231.71–1254.10 FPS**.
+- Process exit code: 0.
+
+Combined throughput is the total measured frame count divided
+by the sum of measured generation durations.
+
+### Interpretation and Limitations
+
+All five measured rounds exceeded the 30 FPS minimum and
+100 FPS target for this workload on the tested machine.
+
+These measurements describe projection throughput after a
+fixed warm-up procedure. They do not measure end-to-end video
+production speed or establish performance for every slice
+size and orientation.
+
+The five rounds belong to one Java process and are not five
+independent process launches. JVM activity, garbage collection,
+and operating-system scheduling may affect the measurements.
+The fixed warm-up does not guarantee full JIT stabilization.
+
+### Reproduction
+
+Run Exercise1_OOP.ProjectionBenchmark with these two arguments:
+
+    "C:/OOP_Test/croissant.nrrd" "C:/OOP_Test/croissant_planes.csv"
+
+Use normal execution, without the debugger.
+No video is produced by this benchmark.
