@@ -432,12 +432,19 @@ Outstanding checks or documentation:
   gzip checksum, corrupted size field, and truncated trailer.
   All 20 NrrdReader tests passed.
 - C08: permission-denied input-file behavior.
-- D03: quoted input and output paths containing spaces.
+- D03: Completed on 2026-10-25. Windows CMD execution with quoted
+  NRRD, CSV and MP4 paths containing spaces succeeded.
+  The application reported 110 frames written, zero rows skipped
+  after CSV parsing, and exit code 0.
 - D08: Completed on 2026-10-25. CLI runs on onion, biscuit_cake,
   and swiss_roll each produced 110 frames with zero rows skipped
   after CSV parsing. See "Additional dataset CLI checks" below.
-- A clean-checkout build and execution trial.
-- Performance measurements with different slice orientations.
+- Fresh-clone build and execution: completed on 2026-10-25.
+  See "Fresh-clone verification" below.
+- Performance measurements with different slice orientations:
+  completed for X-, Y- and Z-normal slices on 2026-10-25.
+  See "Axis orientation benchmark" in EXPERIMENTS.md.
+  Oblique-plane performance was not measured.
 - Benchmark code/input revision references for reproducibility.
 
 The geometry record demonstrates triangle leg-length tolerance
@@ -491,3 +498,19 @@ a warmed-up benchmark or a replacement for the 500³ experiment.
 
 The input volumes and these three output videos remain local.
 The CSV is included in the repository.
+
+### Fresh-clone verification — 2026-10-25
+
+Cloned the GitHub repository into C:/OOP_Test/clean_checkout
+on the existing Windows development machine.
+
+- All 88 automated tests passed.
+- Compilation and runtime dependency copying succeeded.
+- SyntheticVolumeGenerator created a new 500 × 500 × 500 volume.
+- Main used that volume and the repository's demo/croissant_planes.csv.
+- The application reported 300 frames written, zero rows skipped
+  after CSV parsing, and exit code 0.
+- Reported frame generation rate: 1187.17 FPS (single run).
+
+This verifies a fresh repository checkout on the existing development
+environment; it is not a clean-machine installation test.

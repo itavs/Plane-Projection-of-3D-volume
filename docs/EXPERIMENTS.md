@@ -367,3 +367,44 @@ Range: 1196.51–1259.95 FPS.
 
 This verifies command-line execution on the development machine.
 It is not a clean-machine installation test.
+
+## Axis orientation benchmark — 2026-10-25
+
+Compared three axis-aligned slice orientations using
+synthetic_500_v1.nrrd, a 500 × 500 × 500 uint8 volume.
+
+Each orientation used 300 congruent isosceles trapezoid slices,
+with positions from 100 through 399 along the corresponding axis.
+The generated frame dimensions were 401 × 413 pixels
+(width × height).
+
+CSV inputs:
+- X-normal: demo/synthetic_x_planes.csv
+- Y-normal: demo/synthetic_y_planes.csv
+- Z-normal: demo/croissant_planes.csv
+
+Each orientation was measured in a separate JVM invocation,
+in X, Y, Z order. Each invocation performed three warm-up rounds
+followed by five measured rounds of 300 frames each.
+Warm-up frames were excluded.
+
+Timing covered FrameGenerator.generate calls only, excluding
+input loading, validation, resizing and video encoding.
+
+| Slice normal | Mean FPS | Combined FPS | Median FPS | FPS range |
+|---|---:|---:|---:|---:|
+| X | 684.92 | 654.75 | 622.06 | 517.93–969.45 |
+| Y | 1184.18 | 1182.90 | 1159.26 | 1146.76–1244.16 |
+| Z | 1249.18 | 1248.83 | 1257.91 | 1208.47–1265.45 |
+
+Measured round rates, in execution order:
+- X: 969.45, 717.26, 597.90, 517.93, 622.06 FPS.
+- Y: 1146.76, 1159.26, 1217.27, 1153.43, 1244.16 FPS.
+- Z: 1208.47, 1261.31, 1252.75, 1265.45, 1257.91 FPS.
+
+All measured rounds exceeded 100 FPS for these inputs.
+X-normal slices showed lower throughput and greater variation.
+The experiment does not isolate the cause of this difference.
+
+These results cover three axis-aligned orientations, not arbitrary
+oblique planes, and do not measure end-to-end video production speed.
