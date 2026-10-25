@@ -431,11 +431,14 @@ Outstanding checks or documentation:
 - N08: - N08: Completed on 2026-10-25. Added regression tests for corrupted
   gzip checksum, corrupted size field, and truncated trailer.
   All 20 NrrdReader tests passed.
-- C08: permission-denied input-file behavior.
-- D03: Completed on 2026-10-25. Windows CMD execution with quoted
+- C08: Completed on 2026-10-25. Read access to a temporary CSV
+  copy was denied using Windows icacls. Main reported failure
+  while reading the CSV and exited with code 1.
+  The deny rule was successfully removed after the test.- D03: Completed on 2026-10-25. Windows CMD execution with
+  quoted
   NRRD, CSV and MP4 paths containing spaces succeeded.
   The application reported 110 frames written, zero rows skipped
-  after CSV parsing, and exit code 0.
+  after CSV parsing, and exit code 0, No output MP4 file was created.
 - D08: Completed on 2026-10-25. CLI runs on onion, biscuit_cake,
   and swiss_roll each produced 110 frames with zero rows skipped
   after CSV parsing. See "Additional dataset CLI checks" below.
@@ -445,7 +448,9 @@ Outstanding checks or documentation:
   completed for X-, Y- and Z-normal slices on 2026-10-25.
   See "Axis orientation benchmark" in EXPERIMENTS.md.
   Oblique-plane performance was not measured.
-- Benchmark code/input revision references for reproducibility.
+- Axis orientation benchmark: reproduction snapshot recorded
+  in EXPERIMENTS.md. Earlier experiments do not yet have
+  individually verified revision references.
 
 The geometry record demonstrates triangle leg-length tolerance
 checks; it does not establish coverage of every tolerance used

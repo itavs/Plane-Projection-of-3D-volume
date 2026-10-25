@@ -408,3 +408,18 @@ The experiment does not isolate the cause of this difference.
 
 These results cover three axis-aligned orientations, not arbitrary
 oblique planes, and do not measure end-to-end video production speed.
+
+### Reproduction reference
+
+Repository snapshot containing the benchmark code and CSV inputs:
+`95be1c7752d9bf72eaa8371acd91f71271d0a928`.
+
+The X and Y CSV inputs were committed after the measurements.
+This reference identifies the stored reproduction snapshot,
+not a commit recorded before running the experiment.
+
+Generate data/synthetic_500_v1.nrrd using SyntheticVolumeGenerator.
+Run ProjectionBenchmark separately with that volume and each CSV:
+- demo/synthetic_x_planes.csv
+- demo/synthetic_y_planes.csv
+- demo/croissant_planes.csv
