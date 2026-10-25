@@ -79,6 +79,8 @@ not end-to-end video production throughput.
 
 Arithmetic mean of the three measurement rates: **1176.51 FPS**.
 
+Median rate: **1180.64 FPS**.
+
 Range: **1146.62–1202.26 FPS**.
 
 All three measured projection rates exceed both the 30 FPS
@@ -174,6 +176,7 @@ are not retained in memory.
 | 5 | 300 | 239.514 | 1252.54 |
 
 - Arithmetic mean of round rates: **1243.24 FPS**.
+- Median rate: **1245.10 FPS**.
 - Combined throughput: **1243.16 FPS**.
 - Range: **1231.71–1254.10 FPS**.
 - Process exit code: 0.
@@ -279,6 +282,7 @@ The timing scope and method are the same as in Experiment 2:
 | 5 | 300 | 240.156 | 1249.19 |
 
 - Arithmetic mean of round rates: **1254.28 FPS**.
+- Median rate: **1252.55 FPS**.
 - Combined throughput: **1254.21 FPS**.
 - Range: **1242.26–1270.74 FPS**.
 - Measured frames: 1,500.
@@ -357,6 +361,7 @@ Benchmark:
 | 5 | 246.265 | 1218.20 |
 
 Mean of round rates: 1224.37 FPS.
+Median rate: **1218.20 FPS**.
 Combined throughput: 1224.01 FPS.
 Range: 1196.51–1259.95 FPS.
 

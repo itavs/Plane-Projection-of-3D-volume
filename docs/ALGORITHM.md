@@ -40,9 +40,33 @@ Trapezoid validation also checks coplanarity, parallel bases,
 consistent base direction, and centered bases. Rectangles are
 accepted as the equal-base special case.
 
-Geometric comparisons use absolute and relative tolerances of
-1e-8. Tests involving normalized directions use a tolerance of
-1e-8. Near-degenerate shapes may therefore be rejected.
+Geometry validation uses:
+
+- ABS_EPS = 1e-8
+- REL_EPS = 1e-8
+- ANGLE_EPS = 1e-8
+
+Length equality is checked using:
+
+    abs(u - v) <= ABS_EPS + REL_EPS * max(abs(u), abs(v))
+
+Points whose distance is at most ABS_EPS are rejected as
+coincident or too close.
+
+For coplanarity and base centering, the distance tolerance is:
+
+    ABS_EPS + REL_EPS * scale
+
+Here, scale is the maximum length among the two bases,
+the two legs, and the vector from a1 to c.
+
+Cross products of normalized directions are compared against
+ANGLE_EPS to check parallelism and reject near-degenerate shapes.
+The base directions must also have a positive dot product.
+
+Geometry validation is performed by the caller before invoking
+FrameGenerator.generate; the generator does not repeat the full
+geometry validation.
 
 ## 3. Common Representation
 
@@ -179,8 +203,9 @@ trilinear interpolation.
 
 ## 8. Pseudocode
 
+```text
 generateFrame(volume, points):
-identify startLeft, startRight, endLeft, endRight
+    identify startLeft, startRight, endLeft, endRight
 
     L = distance(startLeft, endLeft)
     B = max(
@@ -218,6 +243,7 @@ identify startLeft, startRight, endLeft, endRight
                 E[y][column] = sampleVolume(volume, p)
 
     return E
+```
 
 ## 9. Converting Frames into Video
 
@@ -238,6 +264,24 @@ its aspect ratio, using nearest-neighbor resizing. Remaining
 space is filled with black.
 
 JCodec encodes the frames in valid CSV-row order at 30 playback FPS.
+For JCodec 0.2.5, VideoWriter bypasses the default RGB-to-YUV
+conversion for these grayscale images.
+
+Each grayscale value is converted directly to limited-range luma:
+
+    Y = 16 + floor((219 * gray + 127) / 255)
+
+JCodec stores the luma byte as Y - 128. Chroma planes contain
+zero bytes, representing neutral chroma in its internal format.
+
+The encoder requires the YUV420J input tag in this version,
+while the supplied samples use limited-range luma to match
+the output's range signaling.
+
+The decoded video may contain small intensity differences due
+to lossy encoding and conversion rounding. Exact grayscale
+mapping is checked before encoding; decoded-video tests allow
+a bounded tolerance.
 
 ## 10. Complexity
 
@@ -259,15 +303,26 @@ it does not represent total application throughput.
 
 ## 11. Decisions Requiring Verification
 
-Tests must specifically cover:
+## 11. Verification
+
+The rounding and endpoint rules require checks covering:
 
 - Fractional leg lengths and scan-line widths.
 - The first and final scan lines.
-- Zero-length scan lines.
 - Triangles and both widening and narrowing trapezoids.
 - Shapes partially or entirely outside the volume.
 - Negative fractional coordinates and upper volume boundaries.
 - Geometry close to the validation tolerances.
 
-These checks will determine whether the documented rounding
-and endpoint rules behave consistently in the implementation.
+The zero-length scan-line branch is defensive. For valid,
+nondegenerate inputs, sampling advances beyond the triangle's
+apex and trapezoids have nonzero bases. Direct coverage of this
+branch should therefore be distinguished from valid-input tests.
+
+Automated tests and recorded results are documented in
+[Testing Strategy and Results](TESTING.md).
+Performance measurements and demonstrations are documented in
+[Experiments](EXPERIMENTS.md).
+
+Passing tests establish the checked cases, not every possible
+floating-point input or geometric configuration.
