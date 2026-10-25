@@ -400,6 +400,50 @@ class NrrdReaderTest {
         );
     }
 
+    @Test
+    void rejectsGzipWithCorruptedChecksum() throws IOException {
+        byte[] compressed = gzip(bytes(100));
+
+        // Corrupt the checksum stored in the gzip trailer.
+        compressed[compressed.length - 8] ^= 1;
+
+        assertRejected(
+                header("uint8", "1 1 1", "gzip", null),
+                compressed
+        );
+    }
+
+    @Test
+    void rejectsGzipWithCorruptedSize() throws IOException {
+        byte[] compressed = gzip(bytes(100));
+
+        // Corrupt the original-size field stored in the trailer.
+        compressed[compressed.length - 4] ^= 1;
+
+        assertRejected(
+                header("uint8", "1 1 1", "gzip", null),
+                compressed
+        );
+    }
+
+    @Test
+    void rejectsGzipWithTruncatedTrailer() throws IOException {
+        byte[] compressed = gzip(bytes(100));
+
+        // Remove between one and eight trailer bytes.
+        for (int missing = 1; missing <= 8; missing++) {
+            byte[] truncated = java.util.Arrays.copyOf(
+                    compressed,
+                    compressed.length - missing
+            );
+
+            assertRejected(
+                    header("uint8", "1 1 1", "gzip", null),
+                    truncated
+            );
+        }
+    }
+
     // Fixture helpers
 
     private String header(

@@ -8,8 +8,12 @@ rules in ALGORITHM.md.
 Checks will cover individual components, the complete command-line
 demo, and frame-generation performance.
 
-This document defines planned tests. It does not claim that
-these tests have already passed.
+This document contains the testing plan and a chronological
+execution record. A planned case is not considered verified
+solely because it appears in the plan.
+
+Historical entries describe the status at the time of execution.
+Later entries may resolve previously pending checks.
 
 ## 2. Approach
 
@@ -413,3 +417,42 @@ Standalone command-line execution remains to be verified.
 - ApplicationTest: 13 tests passed.
 - Full Maven run: 85 tests, 0 failures, 0 errors, 0 skipped.
 - Build result: BUILD SUCCESS.
+
+### Verification Review (2026-10-25)
+
+- The latest recorded full Maven run passed 85 tests,
+  with no failures, errors, or skipped tests.
+- Croissant and synthetic-volume video generation and warmed
+  projection benchmarks are documented in EXPERIMENTS.md.
+- The synthetic workflow was also executed from Windows CMD.
+
+Outstanding checks or documentation:
+
+- N08: explicit gzip trailer-corruption coverage.
+- C08: permission-denied input-file behavior.
+- D03: quoted input and output paths containing spaces.
+- D08: application runs on onion, biscuit_cake, and swiss_roll.
+- A clean-checkout build and execution trial.
+- Performance measurements with different slice orientations.
+- Benchmark code/input revision references for reproducibility.
+
+The geometry record demonstrates triangle leg-length tolerance
+checks; it does not establish coverage of every tolerance used
+for trapezoid validation.
+
+Passing the current suite does not imply that every planned
+case has been executed.
+
+### NRRD gzip integrity validation — 2026-10-25
+
+Fixed an issue where reading the expected voxel bytes did not
+necessarily trigger gzip trailer validation. The reader now consumes
+the gzip stream to its end and reports integrity failures as IOException.
+
+Added three regression tests covering:
+- Corrupted gzip checksum (CRC).
+- Corrupted uncompressed-size field.
+- Truncated gzip trailer.
+
+Validation: all 20 NrrdReader tests passed.
+Full Maven test suite: 88 tests passed, with no failures or errors.

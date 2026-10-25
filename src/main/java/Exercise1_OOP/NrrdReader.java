@@ -83,6 +83,17 @@ public class NrrdReader {
                             e
                     );
                 }
+                if ("gzip".equals(encoding) || "gz".equals(encoding)) {
+                    try {
+                        // Reach the end so gzip integrity checks are performed.
+                        data.transferTo(OutputStream.nullOutputStream());
+                    } catch (IOException e) {
+                        throw new IOException(
+                                "Invalid or incomplete gzip stream in NRRD file.",
+                                e
+                        );
+                    }
+                }
                 return new Volume(
                         sizes[0], sizes[1], sizes[2],
                         type.bytes, type.signed,
