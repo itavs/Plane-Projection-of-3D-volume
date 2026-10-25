@@ -35,8 +35,8 @@ a1, a2, b, c:
 
 - a1 = (150, 50, z)
 - a2 = (350, 50, z)
-- b  = (50, 450, z)
-- c  = (450, 450, z)
+- b = (50, 450, z)
+- c = (450, 450, z)
 
 The value of z increases from 100 to 399, inclusive.
 All coordinates are voxel-index coordinates.
@@ -70,12 +70,12 @@ not end-to-end video production throughput.
 
 ### Results
 
-| Run | Frames | Skipped rows | Generation rate |
-|---|---:|---:|---:|
-| Preliminary check | 300 | 0 | 1148.30 FPS |
-| Measurement 1 | 300 | 0 | 1146.62 FPS |
-| Measurement 2 | 300 | 0 | 1202.26 FPS |
-| Measurement 3 | 300 | 0 | 1180.64 FPS |
+| Run               | Frames | Skipped rows | Generation rate |
+|-------------------|-------:|-------------:|----------------:|
+| Preliminary check |    300 |            0 |     1148.30 FPS |
+| Measurement 1     |    300 |            0 |     1146.62 FPS |
+| Measurement 2     |    300 |            0 |     1202.26 FPS |
+| Measurement 3     |    300 |            0 |     1180.64 FPS |
 
 Arithmetic mean of the three measurement rates: **1176.51 FPS**.
 
@@ -167,13 +167,13 @@ are not retained in memory.
 
 ### Results
 
-| Round | Frames | Generation time (ms) | FPS |
-|---|---:|---:|---:|
-| 1 | 300 | 243.362 | 1232.73 |
-| 2 | 300 | 240.944 | 1245.10 |
-| 3 | 300 | 239.215 | 1254.10 |
-| 4 | 300 | 243.564 | 1231.71 |
-| 5 | 300 | 239.514 | 1252.54 |
+| Round | Frames | Generation time (ms) |     FPS |
+|-------|-------:|---------------------:|--------:|
+| 1     |    300 |              243.362 | 1232.73 |
+| 2     |    300 |              240.944 | 1245.10 |
+| 3     |    300 |              239.215 | 1254.10 |
+| 4     |    300 |              243.564 | 1231.71 |
+| 5     |    300 |              239.514 | 1252.54 |
 
 - Arithmetic mean of round rates: **1243.24 FPS**.
 - Median rate: **1245.10 FPS**.
@@ -273,13 +273,13 @@ The timing scope and method are the same as in Experiment 2:
 
 ### Results
 
-| Round | Frames | Generation time (ms) | FPS |
-|---|---:|---:|---:|
-| 1 | 300 | 241.494 | 1242.26 |
-| 2 | 300 | 236.082 | 1270.74 |
-| 3 | 300 | 238.728 | 1256.66 |
-| 4 | 300 | 239.512 | 1252.55 |
-| 5 | 300 | 240.156 | 1249.19 |
+| Round | Frames | Generation time (ms) |     FPS |
+|-------|-------:|---------------------:|--------:|
+| 1     |    300 |              241.494 | 1242.26 |
+| 2     |    300 |              236.082 | 1270.74 |
+| 3     |    300 |              238.728 | 1256.66 |
+| 4     |    300 |              239.512 | 1252.55 |
+| 5     |    300 |              240.156 | 1249.19 |
 
 - Arithmetic mean of round rates: **1254.28 FPS**.
 - Median rate: **1252.55 FPS**.
@@ -343,22 +343,24 @@ The synthetic workflow was also executed from Windows CMD
 using the generated volume and the repository's CSV sequence.
 
 Video generation:
+
 - Output: synthetic_cmd_check.mp4.
 - Frames written: 300.
 - Skipped rows: 0.
 - Reported generation rate: 1188.68 FPS.
 
 Benchmark:
+
 - 3 warm-up rounds, excluded from measurements.
 - 5 measured rounds, totaling 1,500 frames.
 
-| Round | Generation time (ms) | FPS |
-|---|---:|---:|
-| 1 | 246.889 | 1215.12 |
-| 2 | 238.104 | 1259.95 |
-| 3 | 250.730 | 1196.51 |
-| 4 | 243.491 | 1232.08 |
-| 5 | 246.265 | 1218.20 |
+| Round | Generation time (ms) |     FPS |
+|-------|---------------------:|--------:|
+| 1     |              246.889 | 1215.12 |
+| 2     |              238.104 | 1259.95 |
+| 3     |              250.730 | 1196.51 |
+| 4     |              243.491 | 1232.08 |
+| 5     |              246.265 | 1218.20 |
 
 Mean of round rates: 1224.37 FPS.
 Median rate: **1218.20 FPS**.
@@ -370,6 +372,9 @@ It is not a clean-machine installation test.
 
 ## Axis orientation benchmark — 2026-10-25
 
+Environment: the same hardware and Java runtime described in
+Experiment 1. Execution was through Windows CMD.
+
 Compared three axis-aligned slice orientations using
 synthetic_500_v1.nrrd, a 500 × 500 × 500 uint8 volume.
 
@@ -379,6 +384,7 @@ The generated frame dimensions were 401 × 413 pixels
 (width × height).
 
 CSV inputs:
+
 - X-normal: demo/synthetic_x_planes.csv
 - Y-normal: demo/synthetic_y_planes.csv
 - Z-normal: demo/croissant_planes.csv
@@ -391,13 +397,14 @@ Warm-up frames were excluded.
 Timing covered FrameGenerator.generate calls only, excluding
 input loading, validation, resizing and video encoding.
 
-| Slice normal | Mean FPS | Combined FPS | Median FPS | FPS range |
-|---|---:|---:|---:|---:|
-| X | 684.92 | 654.75 | 622.06 | 517.93–969.45 |
-| Y | 1184.18 | 1182.90 | 1159.26 | 1146.76–1244.16 |
-| Z | 1249.18 | 1248.83 | 1257.91 | 1208.47–1265.45 |
+| Slice normal | Mean FPS | Combined FPS | Median FPS |       FPS range |
+|--------------|---------:|-------------:|-----------:|----------------:|
+| X            |   684.92 |       654.75 |     622.06 |   517.93–969.45 |
+| Y            |  1184.18 |      1182.90 |    1159.26 | 1146.76–1244.16 |
+| Z            |  1249.18 |      1248.83 |    1257.91 | 1208.47–1265.45 |
 
 Measured round rates, in execution order:
+
 - X: 969.45, 717.26, 597.90, 517.93, 622.06 FPS.
 - Y: 1146.76, 1159.26, 1217.27, 1153.43, 1244.16 FPS.
 - Z: 1208.47, 1261.31, 1252.75, 1265.45, 1257.91 FPS.
@@ -420,6 +427,7 @@ not a commit recorded before running the experiment.
 
 Generate data/synthetic_500_v1.nrrd using SyntheticVolumeGenerator.
 Run ProjectionBenchmark separately with that volume and each CSV:
+
 - demo/synthetic_x_planes.csv
 - demo/synthetic_y_planes.csv
 - demo/croissant_planes.csv

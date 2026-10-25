@@ -192,6 +192,20 @@ the target is at least 100 generation FPS.
 Video playback FPS is a separate setting and is not evidence
 of computational performance.
 
+Execution notes and deviations from the original plan:
+
+The croissant benchmarks used parallel Z-normal slices.
+A later orientation comparison used the generated synthetic
+500³ volume with X-, Y- and Z-normal slices.
+
+The X and Y CSV inputs were committed after measurement.
+Their stored reproduction snapshot is identified in EXPERIMENTS.md;
+it is not a revision recorded before execution.
+
+Experiment 1 used separate application launches without a shared
+JVM warm-up. Later benchmark experiments used three warm-up rounds
+and five measured rounds within each JVM invocation.
+
 ## 11. Recording Results
 
 Each executed test or test group will record:
@@ -420,44 +434,45 @@ Standalone command-line execution remains to be verified.
 
 ### Verification Review (2026-10-25)
 
-- The latest recorded full Maven run passed 85 tests,
-  with no failures, errors, or skipped tests.
-- Croissant and synthetic-volume video generation and warmed
-  projection benchmarks are documented in EXPERIMENTS.md.
-- The synthetic workflow was also executed from Windows CMD.
+Current automated test status: 88 tests passed through Maven,
+with no failures, errors, or skipped tests.
 
-Outstanding checks or documentation:
+Completed verification:
 
-- N08: - N08: Completed on 2026-10-25. Added regression tests for corrupted
-  gzip checksum, corrupted size field, and truncated trailer.
+- N08: Added regression tests for corrupted gzip checksum,
+  corrupted size field, and truncated trailer.
   All 20 NrrdReader tests passed.
-- C08: Completed on 2026-10-25. Read access to a temporary CSV
-  copy was denied using Windows icacls. Main reported failure
-  while reading the CSV and exited with code 1.
-  The deny rule was successfully removed after the test.- D03: Completed on 2026-10-25. Windows CMD execution with
-  quoted
-  NRRD, CSV and MP4 paths containing spaces succeeded.
-  The application reported 110 frames written, zero rows skipped
-  after CSV parsing, and exit code 0, No output MP4 file was created.
-- D08: Completed on 2026-10-25. CLI runs on onion, biscuit_cake,
-  and swiss_roll each produced 110 frames with zero rows skipped
-  after CSV parsing. See "Additional dataset CLI checks" below.
-- Fresh-clone build and execution: completed on 2026-10-25.
-  See "Fresh-clone verification" below.
-- Performance measurements with different slice orientations:
-  completed for X-, Y- and Z-normal slices on 2026-10-25.
-  See "Axis orientation benchmark" in EXPERIMENTS.md.
-  Oblique-plane performance was not measured.
-- Axis orientation benchmark: reproduction snapshot recorded
-  in EXPERIMENTS.md. Earlier experiments do not yet have
-  individually verified revision references.
+- C08: Denied read access to a temporary CSV copy using Windows
+  icacls. Main reported failure while reading the CSV and exited
+  with code 1. No output MP4 file was created.
+  The deny rule was successfully removed after the test.
+- D03: Windows CMD execution with quoted NRRD, CSV and MP4 paths
+  containing spaces succeeded. The application wrote 110 frames,
+  skipped zero rows after CSV parsing, and exited with code 0.
+  The output video was opened and played successfully.
+- D08: CLI runs on onion, biscuit_cake and swiss_roll each
+  produced 110 frames with zero rows skipped after CSV parsing.
+  Croissant and synthetic-volume runs are recorded in EXPERIMENTS.md.
+- Fresh-clone verification: all 88 tests passed, and a newly
+  generated synthetic volume was used to produce a 300-frame video.
+  This was performed on the existing development machine.
+- Performance: X-, Y- and Z-normal slices were measured using
+  the synthetic 500³ volume. Results and a reproduction snapshot
+  reference are recorded in EXPERIMENTS.md.
 
-The geometry record demonstrates triangle leg-length tolerance
-checks; it does not establish coverage of every tolerance used
-for trapezoid validation.
+Remaining coverage and reproducibility limitations:
 
-Passing the current suite does not imply that every planned
-case has been executed.
+- Oblique-plane performance was not measured.
+- Geometry tests cover triangle leg-length tolerance, but do not
+  establish boundary coverage for every trapezoid tolerance.
+- Earlier experiments do not have individually verified
+  code/input revision references.
+- Public retrieval or distribution of the course-shared NRRD
+  files remains unresolved. The generated synthetic experiment
+  provides a reproducible alternative.
+
+Passing the current suite establishes the checked cases,
+not every possible input or full completion of every planned check.
 
 ### NRRD gzip integrity validation — 2026-10-25
 

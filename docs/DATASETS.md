@@ -9,16 +9,17 @@ All paths below are relative to the project root.
 
 ## Dataset Overview
 
-| File in `data/` | Dimensions | Voxel type | Encoding | Observed range | Purpose |
-| --- | --- | --- | --- | --- | --- |
-| `constant_100_10x10x10.nrrd` | 10 × 10 × 10 | uint8 | raw | 100–100 | Known-value sampling and boundary tests |
-| `onion.nrrd` | 256 × 256 × 130 | uint8 | gzip | 0–232 | 8-bit volume processing |
-| `biscuit_cake.nrrd` | 256 × 256 × 130 | uint16 | gzip | 0–3,986 | 16-bit volume processing |
-| `swiss_roll.nrrd` | 256 × 256 × 130 | uint32 | gzip | 0–186,330 | 32-bit volume processing |
-| `croissant.nrrd` | 500 × 500 × 500 | uint8 | gzip | 0–255 | Performance benchmark |
+| File in `data/`              | Dimensions      | Voxel type | Encoding | Observed range | Purpose                                       |
+|------------------------------|-----------------|------------|----------|----------------|-----------------------------------------------|
+| `constant_100_10x10x10.nrrd` | 10 × 10 × 10    | uint8      | raw      | 100–100        | Known-value sampling and boundary tests       |
+| `onion.nrrd`                 | 256 × 256 × 130 | uint8      | gzip     | 0–232          | 8-bit volume processing                       |
+| `biscuit_cake.nrrd`          | 256 × 256 × 130 | uint16     | gzip     | 0–3,986        | 16-bit volume processing                      |
+| `swiss_roll.nrrd`            | 256 × 256 × 130 | uint32     | gzip     | 0–186,330      | 32-bit volume processing                      |
+| `croissant.nrrd`             | 500 × 500 × 500 | uint8      | gzip     | 0–255          | Performance benchmark                         |
+| `synthetic_500_v1.nrrd`      | 500 × 500 × 500 | uint8      | raw      | 0–255          | Reproducible video and performance experiment |
 
 The 16-bit and 32-bit files use little-endian byte order.
-All five files contain their voxel data within the NRRD file.
+All six datasets store their voxel data within the NRRD file.
 
 ## Known-Value Dataset
 
@@ -72,8 +73,10 @@ The Java application has since processed croissant.nrrd to
 produce a 300-frame video. Repeated measurements and a benchmark
 with warm-up are documented in [Experiments](EXPERIMENTS.md).
 
-Full application runs on onion.nrrd, biscuit_cake.nrrd, and
-swiss_roll.nrrd have not yet been documented.
+Full application runs on onion.nrrd, biscuit_cake.nrrd and
+swiss_roll.nrrd were completed on 2026-10-25.
+Each produced 110 frames with zero rows skipped after CSV parsing.
+Results are documented in [Testing Strategy and Results](TESTING.md).
 
 ## Coverage and Limitations
 

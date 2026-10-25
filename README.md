@@ -22,10 +22,10 @@ it does not accumulate values along viewing rays.
 
 ## Input and Output
 
-| File | Purpose |
-| --- | --- |
-| NRRD input | Stores the volume dimensions and voxel values. |
-| CSV input | Defines one slice per row using three or four 3D points. |
+| File       | Purpose                                                          |
+|------------|------------------------------------------------------------------|
+| NRRD input | Stores the volume dimensions and voxel values.                   |
+| CSV input  | Defines one slice per row using three or four 3D points.         |
 | MP4 output | Contains one frame for each valid slice, preserving input order. |
 
 Each point consists of three numeric coordinates: `x`, `y`, and `z`.
@@ -62,17 +62,17 @@ space directions are outside the current scope.
 
 Responsibilities are separated into dedicated classes:
 
-| Class | Responsibility |
-| --- | --- |
-| `Point3D` | Represents a point with x, y, and z coordinates. |
-| `SliceRow` | Stores a row's points and original line number. |
-| `NrrdReader` | Reads volume metadata and voxel data. |
-| `CsvReader` | Parses CSV rows into slice definitions. |
-| `GeometryValidator` | Checks whether the points define a supported shape. |
-| `FrameGenerator` | Samples the volume to produce a 2D frame. |
-| `VideoWriter` | Converts frames to grayscale images and writes the MP4. |
-| `Application` | Coordinates the processing workflow. |
-| `Main` | Provides the program entry point. |
+| Class               | Responsibility                                          |
+|---------------------|---------------------------------------------------------|
+| `Point3D`           | Represents a point with x, y, and z coordinates.        |
+| `SliceRow`          | Stores a row's points and original line number.         |
+| `NrrdReader`        | Reads volume metadata and voxel data.                   |
+| `CsvReader`         | Parses CSV rows into slice definitions.                 |
+| `GeometryValidator` | Checks whether the points define a supported shape.     |
+| `FrameGenerator`    | Samples the volume to produce a 2D frame.               |
+| `VideoWriter`       | Converts frames to grayscale images and writes the MP4. |
+| `Application`       | Coordinates the processing workflow.                    |
+| `Main`              | Provides the program entry point.                       |
 
 ## Technologies
 
@@ -121,9 +121,14 @@ Project documentation:
 - [Testing Strategy and Results](docs/TESTING.md)
 - [Experiment and Results](docs/EXPERIMENTS.md)
 
-Remaining verification includes reviewing consistency between
-the requirements, implementation, and test coverage, and completing
-any outstanding dataset checks.
+Additional verification includes CLI runs on all three smaller
+course-shared volumes, quoted paths containing spaces,
+permission-denied CSV handling, and a fresh-clone build and demo
+on the existing development machine.
+
+Synthetic-volume performance was measured for X-, Y- and Z-normal
+slices. Remaining coverage and reproducibility limitations are
+listed in [Testing Strategy and Results](docs/TESTING.md).
 
 The course-shared NRRD files are not included in the repository.
 Reproducing the croissant experiment requires obtaining the same
@@ -133,6 +138,7 @@ source remain unverified.
 ## Build and Run (Windows CMD)
 
 Requirements:
+
 - JDK 26 and Maven available in the terminal.
 - An NRRD input file and a CSV file containing plane coordinates.
 - An existing output directory.

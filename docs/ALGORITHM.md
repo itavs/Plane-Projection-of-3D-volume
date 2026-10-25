@@ -73,10 +73,10 @@ geometry validation.
 Both shapes are represented by two starting points and two
 ending points:
 
-| Shape | Start left | Start right | End left | End right |
-| --- | --- | --- | --- | --- |
-| Triangle | a | a | b | c |
-| Trapezoid | a1 | a2 | b | c |
+| Shape     | Start left | Start right | End left | End right |
+|-----------|------------|-------------|----------|-----------|
+| Triangle  | a          | a           | b        | c         |
+| Trapezoid | a1         | a2          | b        | c         |
 
 For a triangle, the starting base has zero length.
 This allows both shapes to use the same sampling procedure.
@@ -125,7 +125,7 @@ For each output row y from 0 to height - 1:
 
 3. Interpolate the scan-line endpoints:
 
-   left  = startLeft  + t × (endLeft  - startLeft)
+   left = startLeft + t × (endLeft - startLeft)
    right = startRight + t × (endRight - startRight)
 
 4. Compute the scan-line length:
@@ -300,8 +300,6 @@ Frames are generated and passed to the video writer one at a time.
 CSV parsing, image resizing, and video encoding have additional
 costs. Frame-generation FPS measures only frame generation;
 it does not represent total application throughput.
-
-## 11. Decisions Requiring Verification
 
 ## 11. Verification
 
