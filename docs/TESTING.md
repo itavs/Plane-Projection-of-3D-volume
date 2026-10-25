@@ -428,10 +428,14 @@ Standalone command-line execution remains to be verified.
 
 Outstanding checks or documentation:
 
-- N08: explicit gzip trailer-corruption coverage.
+- N08: - N08: Completed on 2026-10-25. Added regression tests for corrupted
+  gzip checksum, corrupted size field, and truncated trailer.
+  All 20 NrrdReader tests passed.
 - C08: permission-denied input-file behavior.
 - D03: quoted input and output paths containing spaces.
-- D08: application runs on onion, biscuit_cake, and swiss_roll.
+- D08: Completed on 2026-10-25. CLI runs on onion, biscuit_cake,
+  and swiss_roll each produced 110 frames with zero rows skipped
+  after CSV parsing. See "Additional dataset CLI checks" below.
 - A clean-checkout build and execution trial.
 - Performance measurements with different slice orientations.
 - Benchmark code/input revision references for reproducibility.
@@ -450,9 +454,40 @@ necessarily trigger gzip trailer validation. The reader now consumes
 the gzip stream to its end and reports integrity failures as IOException.
 
 Added three regression tests covering:
+
 - Corrupted gzip checksum (CRC).
 - Corrupted uncompressed-size field.
 - Truncated gzip trailer.
 
 Validation: all 20 NrrdReader tests passed.
 Full Maven test suite: 88 tests passed, with no failures or errors.
+
+### Additional dataset CLI checks — 2026-10-25
+
+Ran Main from Windows CMD on onion.nrrd, biscuit_cake.nrrd,
+and swiss_roll.nrrd using demo/small_volume_planes.csv.
+
+The CSV contains 110 isosceles trapezoid slices at integer
+Z coordinates from 10 through 119. Point order is:
+(80,30,z), (170,30,z), (30,220,z), (220,220,z).
+
+| Dataset           | Frames written | Rows skipped after CSV parsing | Frame generation rate |
+|-------------------|---------------:|-------------------------------:|----------------------:|
+| onion.nrrd        |            110 |                              0 |           3668.81 FPS |
+| biscuit_cake.nrrd |            110 |                              0 |           3710.54 FPS |
+| swiss_roll.nrrd   |            110 |                              0 |           3745.39 FPS |
+
+All three output videos were verified to contain 110 frames
+at 640 × 480, with a playback rate of 30 FPS and a duration
+of approximately 3.67 seconds.
+
+Visual inspection of the first, middle and last frames showed
+different slice content. This is a basic integration check,
+not a voxel-by-voxel correctness test.
+
+Performance figures are single-run observations of frame generation
+only, excluding input loading and video encoding. They are not
+a warmed-up benchmark or a replacement for the 500³ experiment.
+
+The input volumes and these three output videos remain local.
+The CSV is included in the repository.
