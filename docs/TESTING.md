@@ -547,4 +547,6 @@ Verification:
   with the file path and exited with code 1.
 - The temporary deny rule was successfully removed afterward.
 
-The new missing-file message was not separately verified in this run.
+A manual check with a nonexistent NRRD path displayed
+"File or directory not found" with the affected path
+and exited with code 1.
