@@ -534,3 +534,17 @@ on the existing Windows development machine.
 
 This verifies a fresh repository checkout on the existing development
 environment; it is not a clean-machine installation test.
+
+### CLI error-message improvement — 2026-10-28
+
+Main now provides explicit messages for access-denied errors
+and missing files or directories, including the affected path.
+
+Verification:
+
+- All 88 automated tests passed.
+- A manual permission-denied CSV check displayed "Access denied"
+  with the file path and exited with code 1.
+- The temporary deny rule was successfully removed afterward.
+
+The new missing-file message was not separately verified in this run.
